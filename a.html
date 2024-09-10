@@ -82,7 +82,7 @@
         this.x += this.dx;
         this.y += this.dy;
 
-        // If the bubble moves off-screen, reset it to the bottom
+      
         if (this.y + this.radius < 0) {
           this.y = canvas.height + this.radius;
           this.x = Math.random() * canvas.width;
@@ -92,7 +92,7 @@
       }
     }
 
-    // Create initial particles
+    
     const createParticles = () => {
       particleArray.length = 0; // Clear existing particles
       for (let i = 0; i < 100; i++) {
