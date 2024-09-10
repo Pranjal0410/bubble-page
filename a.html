@@ -94,20 +94,20 @@
 
     
     const createParticles = () => {
-      particleArray.length = 0; // Clear existing particles
+      particleArray.length = 0; 
       for (let i = 0; i < 100; i++) {
         particleArray.push(new Particle());
       }
     };
 
-    // Animation loop
+    
     const animate = () => {
       context.clearRect(0, 0, canvas.width, canvas.height);
       particleArray.forEach((particle) => particle.move());
       requestAnimationFrame(animate);
     };
 
-    // Initialize particles and start animation
+    
     createParticles();
     animate();
   </script>
