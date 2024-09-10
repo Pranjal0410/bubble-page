@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Floating Bubbles</title>
+  <style>
+    
+    #canvas {
+      background: linear-gradient(135deg, #00b4ff, #0048ff);
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    const canvas = document.getElementById("canvas");
+    const context = canvas.getContext("2d");
+
+    
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    const particleArray = [];
+
+    
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width; 
+        this.y = canvas.height + Math.random() * canvas.height; 
+        this.radius = Math.random() * 30 + 10;  
+        this.dx = Math.random() * 2 - 1;  
+        this.dy = Math.random() * -2 - 1;  
+        this.hue = Math.random() * 360;  
+        this.opacity = 0.7;  
+      }
+
+    
+      draw() {
+        context.beginPath();
+        context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        context.strokeStyle = `hsla(${this.hue}, 100%, 50%, ${this.opacity})`;
+        context.lineWidth = 2;
+        context.stroke();
+
+        
+        const gradient = context.createRadialGradient(
+          this.x,
+          this.y,
+          1,
+          this.x,
+          this.y,
+          this.radius
+        );
+        gradient.addColorStop(0.2, `rgba(255, 255, 255, ${this.opacity})`);
+        gradient.addColorStop(0.9, `hsla(${this.hue}, 100%, 50%, ${this.opacity * 0.2})`);
+
+
+        context.fillStyle = gradient;
+        context.fill();
+      }
+
+    
+      move() {
+        this.x += this.dx;
+        this.y += this.dy;
+
+        // If the bubble moves off-screen, reset it to the bottom
+        if (this.y + this.radius < 0) {
+          this.y = canvas.height + this.radius;
+          this.x = Math.random() * canvas.width;
+        }
+
+        this.draw();
+      }
+    }
+
+    // Create initial particles
+    const createParticles = () => {
+      particleArray.length = 0; // Clear existing particles
+      for (let i = 0; i < 100; i++) {
+        particleArray.push(new Particle());
+      }
+    };
+
+    // Animation loop
+    const animate = () => {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      particleArray.forEach((particle) => particle.move());
+      requestAnimationFrame(animate);
+    };
+
+    // Initialize particles and start animation
+    createParticles();
+    animate();
+  </script>
+</body>
+</html>
